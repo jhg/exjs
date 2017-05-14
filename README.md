@@ -2,6 +2,8 @@
 
 Elixir to JavaScript compiler wrote in Elixir
 
+[![Build Status](https://travis-ci.org/jhg/exjs.svg?branch=master)](https://travis-ci.org/jhg/exjs)
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
