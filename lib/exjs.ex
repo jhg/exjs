@@ -23,8 +23,17 @@ defmodule Exjs do
     iex> Exjs.compile_from_string "fn(x) -> 4 / x end"
     "function(x){return 4/x}"
 
+    iex> Exjs.compile_from_string "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8"
+    "36"
+
+    iex> Exjs.compile_from_string "1 * 2 * 3 * 4 * 5 * 6 * 7 * 8"
+    "40320"
+
     iex> Exjs.compile_from_string "0"
     "0"
+
+    iex> Exjs.compile_from_string "x"
+    "x"
 
     iex> Exjs.compile_from_string "Window.Console.log []"
     "window.console.log([])"

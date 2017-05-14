@@ -32,6 +32,12 @@ defmodule Exjs.Parser do
     iex> Exjs.Parser.parse "Window.Console.log []"
     {{:., [], [{:__aliases__, [], [:Window, :Console]}, :log]}, [], [[]]}
 
+    iex> Exjs.Parser.parse "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8"
+    {:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [1, 2]}, 3]}, 4]}, 5]}, 6]}, 7]}, 8]}
+
+    iex> Exjs.Parser.parse "1 * 2 * 3 * 4 * 5 * 6 * 7 * 8"
+    {:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [1, 2]}, 3]}, 4]}, 5]}, 6]}, 7]}, 8]}
+
     iex> Exjs.Parser.parse "()"
     nil
 
