@@ -1,6 +1,6 @@
 defmodule Exjs.Optimizer do
   @moduledoc """
-  Exjs optimizer.
+  Exjs optimizer of AST.
   """
 
   @doc """

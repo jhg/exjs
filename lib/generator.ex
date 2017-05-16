@@ -1,6 +1,6 @@
 defmodule Exjs.Generator do
   @moduledoc """
-  Exjs generator.
+  Exjs generator of Javascript code from AST parsed and transformed.
   """
 
   @doc """
