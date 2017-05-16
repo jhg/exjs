@@ -8,17 +8,17 @@ defmodule Exjs.Generator do
 
   ## Examples
 
-    iex> Exjs.Generator.generate {:fn, [], [[{:x, [], nil}], {:return, [], {:+, [], [4, {:x, [], nil}]}}]}
-    "function(x){return 4+x}"
+    iex> Exjs.Generator.generate nil
+    "null"
 
-    iex> Exjs.Generator.generate {:fn, [], [[{:x, [], nil}], {:return, [], {:*, [], [4, {:x, [], nil}]}}]}
-    "function(x){return 4*x}"
+    iex> Exjs.Generator.generate {:x, [], nil}
+    "x"
 
-    iex> Exjs.Generator.generate {:+, [], [1, :x]}
-    "1+x"
+    iex> Exjs.Generator.generate {0, [], nil}
+    "0"
 
-    iex> Exjs.Generator.generate {:*, [], [1, :x]}
-    "1*x"
+    iex> Exjs.Generator.generate {0, [debug: true], nil}
+    "0"
 
     iex> Exjs.Generator.generate 2
     "2"
@@ -26,17 +26,17 @@ defmodule Exjs.Generator do
     iex> Exjs.Generator.generate 2.0
     "2.0"
 
-    iex> Exjs.Generator.generate {0, [], nil}
-    "0"
+    iex> Exjs.Generator.generate {:+, [], [1, :x]}
+    "1+x"
 
-    iex> Exjs.Generator.generate {:x, [], nil}
-    "x"
+    iex> Exjs.Generator.generate {:*, [], [1, :x]}
+    "1*x"
 
-    iex> Exjs.Generator.generate {0, [debug: true], nil}
-    "0"
+    iex> Exjs.Generator.generate [1, 2]
+    "[1,2]"
 
-    iex> Exjs.Generator.generate nil
-    "null"
+    iex> Exjs.Generator.generate [1, 2, {:x, [], nil}, 4]
+    "[1,2,x,4]"
 
     iex> Exjs.Generator.generate {:return, [], {:x, [], nil}}
     "return x"
@@ -47,11 +47,17 @@ defmodule Exjs.Generator do
     iex> Exjs.Generator.generate {:return, [], {:*, [], [1, :x]}}
     "return 1*x"
 
+    iex> Exjs.Generator.generate {:fn, [], [[{:x, [], nil}], {:return, [], {:+, [], [4, {:x, [], nil}]}}]}
+    "function(x){return 4+x}"
+
+    iex> Exjs.Generator.generate {:fn, [], [[{:x, [], nil}], {:return, [], {:*, [], [4, {:x, [], nil}]}}]}
+    "function(x){return 4*x}"
+
     iex> Exjs.Generator.generate {:length, [], [{:x, [], nil}]}
     "x.length"
 
-    iex> Exjs.Generator.generate [1, 2]
-    "[1,2]"
+    iex> Exjs.Generator.generate {:length, [], [[1, 2]]}
+    "[1,2].length"
 
   ## Cases that must be detected in previous steps
 

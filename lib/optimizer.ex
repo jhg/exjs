@@ -47,6 +47,12 @@ defmodule Exjs.Optimizer do
     iex> Exjs.Optimizer.optimize {:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [1, 2]}, 3]}, 4]}, 5]}, 6]}, 7]}, 8]}
     40320
 
+    iex> Exjs.Optimizer.optimize {:*, [], [{:+, [], [1, 2]}, 3]}
+    9
+
+    iex> Exjs.Optimizer.optimize {:+, [], [1, {:*, [], [2, 3]}]}
+    7
+
     iex> Exjs.Optimizer.optimize {:x, [], nil}
     {:x, [], nil}
 
