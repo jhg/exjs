@@ -59,6 +59,7 @@ defmodule Exjs.Generator do
     iex> Exjs.Generator.generate {:length, [], [[1, 2]]}
     "[1,2].length"
 
+  ## TODO
   ## Cases that must be detected in previous steps
 
     iex> Exjs.Generator.generate {:length, [], [[1, 2], [3, 4]]}
@@ -140,6 +141,7 @@ defmodule Exjs.Generator do
   # Simple node or content
   def generate(content) when is_list content do
     content = content
+    |> Enum.map(fn(item) -> generate item end)
     |> Enum.join(",")
     "[#{content}]"
   end
