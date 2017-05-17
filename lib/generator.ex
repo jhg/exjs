@@ -164,7 +164,8 @@ defmodule Exjs.Generator do
 
   # List of nodes to process
   defp generate_sub_nodes(content) when is_list content do
-    content
-    |> Enum.map(fn(item) -> generate item end)
+    Enum.map content, fn(item) ->
+      generate(item)
+    end
   end
 end

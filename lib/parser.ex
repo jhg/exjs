@@ -67,7 +67,7 @@ defmodule Exjs.Parser do
     |> process_all_ast
   end
 
-  # Simplifie the fn block
+  # Simplifie the fn block and add the return to transform to Javascript AST
   defp process_all_ast({:fn, properties, [{:->, block_properties, content}]}) do
     [last_sentence|rest_sentences] = Enum.reverse content
     content = Enum.reverse [{:return, [], last_sentence}|rest_sentences]
@@ -108,13 +108,12 @@ defmodule Exjs.Parser do
 
   # Process properties of nodes
   defp process_all_properties(properties) when is_list properties do
-    properties
-    |> Enum.filter(fn(item) ->
+    Enum.filter properties, fn(item) ->
       # Clean the AST
       case item do
         {:line, _number} -> false
         _ -> true
       end
-    end)
+    end
   end
 end

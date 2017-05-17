@@ -97,8 +97,9 @@ defmodule Exjs.Optimizer do
   end
   # List of nodes to process
   def optimize(content) when is_list content do
-    content
-    |> Enum.map(fn(item) -> optimize item end)
+    Enum.map content, fn(item) ->
+      optimize(item)
+    end
   end
   # Simple node or content
   def optimize(content) do
