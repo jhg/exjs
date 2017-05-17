@@ -79,12 +79,9 @@ defmodule Exjs.Parser do
   end
   # Common node processor
   defp process_all_ast({token, properties, content}) do
-    token = token
-    |> process_all_ast
-    properties = properties
-    |> process_all_properties
-    content = content
-    |> process_all_ast
+    token = process_all_ast token
+    properties = process_all_properties properties
+    content = process_all_ast content
     {token, properties, content}
   end
   defp process_all_ast({token, content}) do

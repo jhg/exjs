@@ -68,35 +68,45 @@ defmodule Exjs.Generator do
   """
   # Anonymous functions
   def generate({:fn, _properties, [parameters|content]}) do
-    parameters = parameters
-    |> generate_sub_nodes
-    |> Enum.join(",")
-    content = content
-    |> generate_sub_nodes
-    |> Enum.join(";")
+    parameters =
+      parameters
+      |> generate_sub_nodes
+      |> Enum.join(",")
+
+    content =
+      content
+      |> generate_sub_nodes
+      |> Enum.join(";")
+
     "function(#{parameters}){#{content}}"
   end
   # Call to functions
   def generate({{:., _call_properties, [{:__aliases__, _aliases_properties, aliases}, function]}, _properties, parameters}) do
-    parameters = parameters
-    |> generate_sub_nodes
-    |> Enum.join(",")
-    aliases = aliases
-    |> Enum.map(fn(item) ->
-      case item do
-        :Window -> "window"
-        :Console -> "console"
-        item -> "#{item}"
-      end
-    end)
-    |> Enum.join(".")
+    parameters =
+      parameters
+      |> generate_sub_nodes
+      |> Enum.join(",")
+
+    aliases =
+      aliases
+      |> Enum.map(fn(item) ->
+        case item do
+          :Window -> "window"
+          :Console -> "console"
+          item -> "#{item}"
+        end
+      end)
+      |> Enum.join(".")
+
     "#{aliases}.#{function}(#{parameters})"
   end
   # length
   def generate({:length, _properties, content}) do
-    content = content
-    |> List.first
-    |> generate
+    content =
+      content
+      |> List.first
+      |> generate
+
     "#{content}.length"
   end
   # Return of function
@@ -132,17 +142,17 @@ defmodule Exjs.Generator do
   end
   # Common node processor
   def generate({token, properties, content}) do
-    token = token
-    |> generate
-    content = content
-    |> generate
+    token = generate token
+    content = generate content
     {token, properties, content}
   end
   # Simple node or content
   def generate(content) when is_list content do
-    content = content
-    |> Enum.map(fn(item) -> generate item end)
-    |> Enum.join(",")
+    content =
+      content
+      |> Enum.map(fn(item) -> generate item end)
+      |> Enum.join(",")
+
     "[#{content}]"
   end
   def generate(content) do

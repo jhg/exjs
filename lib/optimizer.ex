@@ -64,8 +64,8 @@ defmodule Exjs.Optimizer do
 
   """
   # Optimizations
-  def optimize({operator, properties, nil}) when is_number(operator) and length(properties) == 0 do
-    optimize operator
+  def optimize({token, properties, nil}) when is_number(token) and length(properties) == 0 do
+    optimize token
   end
   def optimize({:+, properties, [operator1, operator2]}) when is_number(operator1) and is_number(operator2) do
     optimize {operator1 + operator2, properties, nil}
@@ -91,10 +91,8 @@ defmodule Exjs.Optimizer do
   end
   # Common node processor
   def optimize({token, properties, content}) do
-    token = token
-    |> optimize
-    content = content
-    |> optimize
+    token = optimize token
+    content = optimize content
     {token, properties, content}
   end
   # List of nodes to process
