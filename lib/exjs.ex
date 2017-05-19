@@ -53,6 +53,9 @@ defmodule Exjs do
     iex> Exjs.compile_from_string "length x"
     "x.length"
 
+    iex> Exjs.compile_from_string "fn(x) -> x end"
+    "function(x){return x}"
+
     iex> Exjs.compile_from_string "fn(x) -> 4 + x end"
     "function(x){return 4+x}"
 
@@ -64,6 +67,9 @@ defmodule Exjs do
 
     iex> Exjs.compile_from_string "fn(x) -> 4 / x end"
     "function(x){return 4/x}"
+
+    iex> Exjs.compile_from_string "fn(x) -> length(x) end"
+    "function(x){return x.length}"
 
   """
   def compile_from_string(source_code) do
