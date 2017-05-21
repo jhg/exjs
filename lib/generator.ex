@@ -32,6 +32,12 @@ defmodule Exjs.Generator do
     iex> Exjs.Generator.generate {:*, [], [1, :x]}
     "1*x"
 
+    iex> Exjs.Generator.generate {:-, [], [1, :x]}
+    "1-x"
+
+    iex> Exjs.Generator.generate {:/, [], [1, :x]}
+    "1/x"
+
     iex> Exjs.Generator.generate [1, 2]
     "[1,2]"
 

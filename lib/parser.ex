@@ -59,6 +59,9 @@ defmodule Exjs.Parser do
     iex> Exjs.Parser.parse "[1, 2]"
     [1, 2]
 
+    iex> Exjs.Parser.parse "x"
+    {:x, [], nil}
+
     iex> Exjs.Parser.parse "List.first [1, 2]"
     {{:., [], [{:__aliases__, [counter: 0], [:List]}, :first]}, [], [[1, 2]]}
 
