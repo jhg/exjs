@@ -4,7 +4,7 @@ defmodule Exjs.Optimizer do
   """
 
   @doc """
-  Optimize the AST of Elixir .
+  Optimize the Elixir AST to generate better Javascript code.
 
   ## Examples
 

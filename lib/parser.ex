@@ -6,6 +6,9 @@ defmodule Exjs.Parser do
   @doc """
   Parse the code wrote in Elixir.
 
+  Convert from string to quoted and transform the Elixir AST to make easy the
+  next steps.
+
   ## Examples
 
     iex> Exjs.Parser.parse "fn(x) -> x * x end"

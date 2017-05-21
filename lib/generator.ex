@@ -4,7 +4,7 @@ defmodule Exjs.Generator do
   """
 
   @doc """
-  Optimize the AST of Elixir .
+  Generate the Javascript code from the Elixir AST.
 
   ## Examples
 
