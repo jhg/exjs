@@ -41,6 +41,12 @@ defmodule Exjs.Parser do
     iex> Exjs.Parser.parse! "{1, 2, 3}"
     {:{}, [], [1, 2, 3]}
 
+    iex> Exjs.Parser.parse! "{1, 2}"
+    {:{}, [], [1, 2]}
+
+    iex> Exjs.Parser.parse! "{1}"
+    {:{}, [], [1]}
+
     iex> Exjs.Parser.parse! "x"
     {:x, [], nil}
 
@@ -117,8 +123,9 @@ defmodule Exjs.Parser do
     content = process_all_ast content
     {token, properties, content}
   end
-  defp process_all_ast({token, content}) do
-    process_all_ast {token, [], content}
+  # Case for {1, 2} (different that {1, 2, 3} or {1})
+  defp process_all_ast({element1, element2}) do
+    process_all_ast {:{}, [], [element1, element2]}
   end
   # List of nodes to process
   defp process_all_ast(content) when is_list content do
