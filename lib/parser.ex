@@ -62,6 +62,9 @@ defmodule Exjs.Parser do
     iex> Exjs.Parser.parse! "[1, 2]"
     [1, 2]
 
+    iex> Exjs.Parser.parse! "{1, 2, 3}"
+    {:{}, [], [1, 2, 3]}
+
     iex> Exjs.Parser.parse! "x"
     {:x, [], nil}
 

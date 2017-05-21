@@ -41,6 +41,9 @@ defmodule Exjs.Generator do
     iex> Exjs.Generator.generate [1, 2]
     "[1,2]"
 
+    iex> Exjs.Generator.generate {:{}, [], [1, 2, 3]}
+    "[1,2,3]"
+
     iex> Exjs.Generator.generate [1, 2, {:x, [], nil}, 4]
     "[1,2,x,4]"
 
@@ -188,6 +191,10 @@ defmodule Exjs.Generator do
     operator1 = generate operator1
     operator2 = generate operator2
     "#{operator1}=#{operator2}"
+  end
+  # Tuple
+  def generate({:{}, _properties, content}) do
+    generate content
   end
   # Common code generation
   def generate({token, _properties, nil}) do

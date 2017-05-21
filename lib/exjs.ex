@@ -38,6 +38,12 @@ defmodule Exjs do
     iex> Exjs.compile_from_string "x = nil"
     "x=null"
 
+    iex> Exjs.compile_from_string "x = [1, 2, 3, 4]"
+    "x=[1,2,3,4]"
+
+    iex> Exjs.compile_from_string "x = {1, 2, 3, 4}"
+    "x=[1,2,3,4]"
+
     iex> Exjs.compile_from_string "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8"
     "36"
 
