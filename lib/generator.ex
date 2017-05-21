@@ -47,6 +47,12 @@ defmodule Exjs.Generator do
     iex> Exjs.Generator.generate {:return, [], {:*, [], [1, :x]}}
     "return 1*x"
 
+    iex> Exjs.Generator.generate {:=, [], [{:x, [], nil}, 0]}
+    "x=0"
+
+    iex> Exjs.Generator.generate {:=, [], [{:x, [], nil}, {:y, [], nil}]}
+    "x=y"
+
     iex> Exjs.Generator.generate {:fn, [], [[{:x, [], nil}], {:return, [], {:+, [], [4, {:x, [], nil}]}}]}
     "function(x){return 4+x}"
 
@@ -134,6 +140,11 @@ defmodule Exjs.Generator do
     operator1 = generate operator1
     operator2 = generate operator2
     "#{operator1}/#{operator2}"
+  end
+  def generate({:=, _properties, [operator1, operator2]}) do
+    operator1 = generate operator1
+    operator2 = generate operator2
+    "#{operator1}=#{operator2}"
   end
   # Common code generation
   def generate({token, _properties, nil}) do
