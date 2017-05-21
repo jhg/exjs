@@ -74,6 +74,15 @@ defmodule Exjs do
     iex> Exjs.compile_from_string "fn(x) -> length(x) end"
     "function(x){return x.length}"
 
+    iex> Exjs.compile_from_string "def x do\\n  0\\nend"
+    "this.x=function(){return 0}"
+
+    iex> Exjs.compile_from_string "def x do\\n  x = 0\\n  x\\nend"
+    "this.x=function(){x=0;return x}"
+
+    iex> Exjs.compile_from_string "defp same(x), do: x"
+    "function same(x){return x}"
+
   """
   def compile_from_string(source_code) do
     source_code

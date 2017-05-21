@@ -59,6 +59,15 @@ defmodule Exjs.Generator do
     iex> Exjs.Generator.generate {:fn, [], [[{:x, [], nil}], {:return, [], {:*, [], [4, {:x, [], nil}]}}]}
     "function(x){return 4*x}"
 
+    iex> Exjs.Generator.generate {:def, [], [{:x, [], nil}, [{:return, [], 0}]]}
+    "this.x=function(){return 0}"
+
+    iex> Exjs.Generator.generate {:def, [], [{:x, [], nil}, [{:=, [], [{:x, [], nil}, 0]}, {:return, [], {:x, [], nil}}]]}
+    "this.x=function(){x=0;return x}"
+
+    iex> Exjs.Generator.generate {:defp, [], [{:same, [], [{:x, [], nil}]}, [{:return, [], {:x, [], nil}}]]}
+    "function same(x){return x}"
+
     iex> Exjs.Generator.generate {:length, [], [{:x, [], nil}]}
     "x.length"
 
@@ -85,6 +94,34 @@ defmodule Exjs.Generator do
       |> Enum.join(";")
 
     "function(#{parameters}){#{content}}"
+  end
+  # Private functions
+  def generate({:defp, _properties, [{function_name, _function_properties, parameters}, content]}) do
+    parameters =
+      parameters
+      |> generate_sub_nodes
+      |> Enum.join(",")
+
+    content =
+      content
+      |> generate_sub_nodes
+      |> Enum.join(";")
+
+    "function #{function_name}(#{parameters}){#{content}}"
+  end
+  # Public functions
+  def generate({:def, _properties, [{function_name, _function_properties, parameters}, content]}) do
+    parameters =
+      parameters
+      |> generate_sub_nodes
+      |> Enum.join(",")
+
+    content =
+      content
+      |> generate_sub_nodes
+      |> Enum.join(";")
+
+    "this.#{function_name}=function(#{parameters}){#{content}}"
   end
   # Call to functions
   def generate({{:., _call_properties, [{:__aliases__, _aliases_properties, aliases}, function]}, _properties, parameters}) do
@@ -174,6 +211,9 @@ defmodule Exjs.Generator do
   end
 
   # List of nodes to process
+  defp generate_sub_nodes(nil) do
+    []
+  end
   defp generate_sub_nodes(content) when is_list content do
     Enum.map content, fn(item) ->
       generate(item)

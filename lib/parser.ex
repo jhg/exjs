@@ -14,8 +14,14 @@ defmodule Exjs.Parser do
     iex> Exjs.Parser.parse "fn(x) -> 2 * 2 * x end"
     {:fn, [], [[{:x, [], nil}], {:return, [], {:*, [], [{:*, [], [2, 2]}, {:x, [], nil}]}}]}
 
-    iex> Exjs.Parser.parse "def x do x end"
-    {:def, [], [{:x, [], nil}, [{:do, [], {:x, [], nil}}]]}
+    iex> Exjs.Parser.parse "def x do\\n  0\\nend"
+    {:def, [], [{:x, [], nil}, [{:return, [], 0}]]}
+
+    iex> Exjs.Parser.parse "def x do\\n  x = 0\\n  x\\nend"
+    {:def, [], [{:x, [], nil}, [{:=, [], [{:x, [], nil}, 0]}, {:return, [], {:x, [], nil}}]]}
+
+    iex> Exjs.Parser.parse "defp same(x), do: x"
+    {:defp, [], [{:same, [], [{:x, [], nil}]}, [{:return, [], {:x, [], nil}}]]}
 
     iex> Exjs.Parser.parse "4 + 2"
     {:+, [], [4, 2]}
@@ -67,13 +73,31 @@ defmodule Exjs.Parser do
     |> process_all_ast
   end
 
-  # Simplifie the fn block and add the return to transform to Javascript AST
+  # Simplifie the functions block and add the return to transform to Javascript AST
   defp process_all_ast({:fn, properties, [{:->, block_properties, content}]}) do
-    [last_sentence|rest_sentences] = Enum.reverse content
-    content = Enum.reverse [{:return, [], last_sentence}|rest_sentences]
+    content = process_all_content(content)
     process_all_ast {:fn, properties ++ block_properties, content}
   end
+  defp process_all_ast({:def, properties, [{name, function_properties, parameters}|[do_content]]}) do
+    [{:do, block_properties, content}] = process_all_ast do_content
+    content = process_all_content(content)
+    properties = process_all_properties(properties++block_properties)
+    function_properties = process_all_properties(function_properties)
+    parameters = process_all_ast parameters
+    {:def, properties, [{name, function_properties, parameters}, content]}
+  end
+  defp process_all_ast({:defp, properties, [{name, function_properties, parameters}|[do_content]]}) do
+    [{:do, block_properties, content}] = process_all_ast do_content
+    content = process_all_content(content)
+    properties = process_all_properties(properties++block_properties)
+    function_properties = process_all_properties(function_properties)
+    parameters = process_all_ast parameters
+    {:defp, properties, [{name, function_properties, parameters}, content]}
+  end
   # Simplifie the do block
+  defp process_all_ast({:do, content}) do
+    process_all_ast {:do, [], content}
+  end
   defp process_all_ast({:do, properties, {:__block__, block_properties, content}}) do
     process_all_ast {:do, properties ++ block_properties, content}
   end
@@ -115,5 +139,16 @@ defmodule Exjs.Parser do
         _ -> true
       end
     end
+  end
+
+  # Add the return
+  defp process_all_content(content) when is_list(content) do
+    [last_sentence|rest_sentences] = Enum.reverse content
+    [{:return, [], last_sentence}|rest_sentences]
+    |> Enum.reverse
+    |> process_all_ast
+  end
+  defp process_all_content(content) do
+    [process_all_ast({:return, [], content})]
   end
 end
