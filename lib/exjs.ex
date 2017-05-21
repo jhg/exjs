@@ -32,6 +32,12 @@ defmodule Exjs do
     iex> Exjs.compile_from_string "x = 2"
     "x=2"
 
+    iex> Exjs.compile_from_string "x = y / 2"
+    "x=y/2"
+
+    iex> Exjs.compile_from_string "x = nil"
+    "x=null"
+
     iex> Exjs.compile_from_string "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8"
     "36"
 
