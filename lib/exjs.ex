@@ -92,7 +92,7 @@ defmodule Exjs do
   """
   def compile_from_string(source_code) do
     source_code
-    |> Parser.parse
+    |> Parser.parse!
     |> Optimizer.optimize
     |> Generator.generate
   end
