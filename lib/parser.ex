@@ -11,21 +11,6 @@ defmodule Exjs.Parser do
 
   ## Examples
 
-    iex> Exjs.Parser.parse! "fn(x) -> x * x end"
-    {:fn, [], [[{:x, [], nil}], {:return, [], {:*, [], [{:x, [], nil}, {:x, [], nil}]}}]}
-
-    iex> Exjs.Parser.parse! "fn(x) -> 2 * 2 * x end"
-    {:fn, [], [[{:x, [], nil}], {:return, [], {:*, [], [{:*, [], [2, 2]}, {:x, [], nil}]}}]}
-
-    iex> Exjs.Parser.parse! "def x do\\n  0\\nend"
-    {:def, [], [{:x, [], nil}, [{:return, [], 0}]]}
-
-    iex> Exjs.Parser.parse! "def x do\\n  x = 0\\n  x\\nend"
-    {:def, [], [{:x, [], nil}, [{:=, [], [{:x, [], nil}, 0]}, {:return, [], {:x, [], nil}}]]}
-
-    iex> Exjs.Parser.parse! "defp same(x), do: x"
-    {:defp, [], [{:same, [], [{:x, [], nil}]}, [{:return, [], {:x, [], nil}}]]}
-
     iex> Exjs.Parser.parse! "4 + 2"
     {:+, [], [4, 2]}
 
@@ -37,15 +22,6 @@ defmodule Exjs.Parser do
 
     iex> Exjs.Parser.parse! "4 / 2"
     {:/, [], [4, 2]}
-
-    iex> Exjs.Parser.parse! "Window.Console.log []"
-    {{:., [], [{:__aliases__, [], [:Window, :Console]}, :log]}, [], [[]]}
-
-    iex> Exjs.Parser.parse! "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8"
-    {:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [1, 2]}, 3]}, 4]}, 5]}, 6]}, 7]}, 8]}
-
-    iex> Exjs.Parser.parse! "1 * 2 * 3 * 4 * 5 * 6 * 7 * 8"
-    {:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [1, 2]}, 3]}, 4]}, 5]}, 6]}, 7]}, 8]}
 
     iex> Exjs.Parser.parse! "(1 + 2) * 3"
     {:*, [], [{:+, [], [1, 2]}, 3]}
@@ -67,6 +43,30 @@ defmodule Exjs.Parser do
 
     iex> Exjs.Parser.parse! "x"
     {:x, [], nil}
+
+    iex> Exjs.Parser.parse! "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8"
+    {:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [{:+, [], [1, 2]}, 3]}, 4]}, 5]}, 6]}, 7]}, 8]}
+
+    iex> Exjs.Parser.parse! "1 * 2 * 3 * 4 * 5 * 6 * 7 * 8"
+    {:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [{:*, [], [1, 2]}, 3]}, 4]}, 5]}, 6]}, 7]}, 8]}
+
+    iex> Exjs.Parser.parse! "fn(x) -> x * x end"
+    {:fn, [], [[{:x, [], nil}], {:return, [], {:*, [], [{:x, [], nil}, {:x, [], nil}]}}]}
+
+    iex> Exjs.Parser.parse! "fn(x) -> 2 * 2 * x end"
+    {:fn, [], [[{:x, [], nil}], {:return, [], {:*, [], [{:*, [], [2, 2]}, {:x, [], nil}]}}]}
+
+    iex> Exjs.Parser.parse! "def x do\\n  0\\nend"
+    {:def, [], [{:x, [], nil}, [{:return, [], 0}]]}
+
+    iex> Exjs.Parser.parse! "def x do\\n  x = 0\\n  x\\nend"
+    {:def, [], [{:x, [], nil}, [{:=, [], [{:x, [], nil}, 0]}, {:return, [], {:x, [], nil}}]]}
+
+    iex> Exjs.Parser.parse! "defp same(x), do: x"
+    {:defp, [], [{:same, [], [{:x, [], nil}]}, [{:return, [], {:x, [], nil}}]]}
+
+    iex> Exjs.Parser.parse! "Window.Console.log []"
+    {{:., [], [{:__aliases__, [], [:Window, :Console]}, :log]}, [], [[]]}
 
     iex> Exjs.Parser.parse! "List.first [1, 2]"
     {{:., [], [{:__aliases__, [counter: 0], [:List]}, :first]}, [], [[1, 2]]}
